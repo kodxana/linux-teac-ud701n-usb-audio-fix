@@ -1,0 +1,42 @@
+--- a/sound/usb/quirks.c
++++ b/sound/usb/quirks.c
+@@ -1887,7 +1887,7 @@
+ }
+ 
+ int snd_usb_select_mode_quirk(struct snd_usb_audio *chip,
+-			      const struct audioformat *fmt)
++			      const struct audioformat *fmt, int pcm_format)
+ {
+ 	struct usb_device *dev = chip->dev;
+ 	int err;
+@@ -1903,7 +1903,7 @@
+ 		msleep(20); /* Delay needed after setting the interface */
+ 
+ 		/* Vendor mode switch cmd is required. */
+-		if (fmt->formats & SNDRV_PCM_FMTBIT_DSD_U32_BE) {
++		if (pcm_format == SNDRV_PCM_FORMAT_DSD_U32_BE) {
+ 			/* DSD mode (DSD_U32) requested */
+ 			err = snd_usb_ctl_msg(dev, usb_sndctrlpipe(dev, 0), 0,
+ 					      USB_DIR_OUT|USB_TYPE_VENDOR|USB_RECIP_INTERFACE,
+--- a/sound/usb/quirks.h
++++ b/sound/usb/quirks.h
+@@ -38,7 +38,7 @@
+ 			   __u16 index, void *data, __u16 size);
+ 
+ int snd_usb_select_mode_quirk(struct snd_usb_audio *chip,
+-			      const struct audioformat *fmt);
++			      const struct audioformat *fmt, int pcm_format);
+ 
+ u64 snd_usb_interface_dsd_format_quirks(struct snd_usb_audio *chip,
+ 					struct audioformat *fp,
+--- a/sound/usb/endpoint.c
++++ b/sound/usb/endpoint.c
+@@ -1532,7 +1532,7 @@
+ 	if (err < 0)
+ 		goto unlock;
+ 
+-	err = snd_usb_select_mode_quirk(chip, ep->cur_audiofmt);
++	err = snd_usb_select_mode_quirk(chip, ep->cur_audiofmt, ep->cur_format);
+ 	if (err < 0)
+ 		goto unlock;
+ 
