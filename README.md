@@ -38,7 +38,7 @@ make -C "/lib/modules/$(uname -r)/build" M="$PWD/sound/usb" -j2 modules
 /usr/sbin/modinfo -F vermagic sound/usb/snd-usb-audio.ko
 ```
 
-Correct path for the final command is `sound/usb/snd-usb-audio.ko` (Linux source tree's USB audio directory is `sound/usb`). The generated module must match the running kernel's ABI and dependency symbols. If the build fails, do not load it.
+The generated module must match the running kernel's ABI and dependency symbols. If the build fails, do not load it.
 
 ## Controlled testing
 
