@@ -1,0 +1,15 @@
+# Never commit locally built kernel objects or device-specific artifacts
+*.o
+*.ko
+*.ko.xz
+*.mod
+*.mod.c
+*.cmd
+*.symvers
+modules.order
+.tmp_versions/
+.*.cmd
+*.log
+*.usbmon
+*.dsf
+*.dff
